@@ -48,7 +48,7 @@ export const ContributionMatrix: React.FC<ContributionMatrixProps> = ({
     scrollRef.current?.scrollToEnd({ animated: false });
   }, []);
   return (
-    <ScrollView ref={scrollRef} horizontal contentContainerStyle="" >
+    <ScrollView ref={scrollRef} horizontal contentContainerStyle="">
       {Array.from({ length: weeksInYear }).map((_, weekIndex) => (
         <View key={weekIndex} className="mr-1 flex-col">
           {Array.from({ length: daysInWeek }).map((_, dayIndex) => {
