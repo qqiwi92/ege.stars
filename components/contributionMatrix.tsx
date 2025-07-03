@@ -1,9 +1,21 @@
-import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useMemo, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 const daysInWeek = 7;
 const weeksInYear = 53;
-const totalCells = daysInWeek * weeksInYear;
 
 type ContributionMatrixProps = {
   data?: number[]; // optional, generates random if not passed
@@ -18,9 +30,6 @@ const getColor = (value: number) => {
 };
 
 const generateRandomData = (): number[] => {
-  //   return Array.from({ length: totalCells }, () =>
-  //     Math.floor(Math.random() * 10),
-  //   );
   return [
     2, 1, 5, 4, 5, 6, 0, 3, 9, 0, 9, 3, 7, 9, 0, 6, 2, 9, 3, 3, 5, 3, 5, 1, 8,
     0, 1, 0, 9, 9, 3, 8, 4, 1, 9, 3, 8, 6, 4, 3, 6, 1, 0, 9, 5, 1, 3, 2, 7, 8,
@@ -40,30 +49,77 @@ const generateRandomData = (): number[] => {
   ];
 };
 
-export const ContributionMatrix: React.FC<ContributionMatrixProps> = ({
-  data = generateRandomData(),
-}) => {
+const ContributionMatrix: React.FC<ContributionMatrixProps> = ({ data }) => {
+  const { isDarkColorScheme } = useColorScheme();
+  const memoizedData = useMemo(() => data || generateRandomData(), [data]);
   const scrollRef = useRef<ScrollView>(null);
-  useEffect(() => {
+  const isAtStart = useSharedValue(true);
+  const isAtEnd = useSharedValue(false);
+
+  const leftGradientStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(isAtStart.value ? 0 : 1, { duration: 300 }),
+  }));
+
+  const rightGradientStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(isAtEnd.value ? 0 : 1, { duration: 300 }),
+  }));
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    isAtStart.value = contentOffset.x <= 0;
+    isAtEnd.value =
+      layoutMeasurement.width + contentOffset.x >= contentSize.width - 1;
+  };
+
+  const gradientColor = isDarkColorScheme ? "#18181b" : "#FFFFFF";
+useEffect(()=>{
     scrollRef.current?.scrollToEnd({ animated: false });
-  }, []);
+},[])
   return (
-    <ScrollView ref={scrollRef} horizontal contentContainerStyle="">
-      {Array.from({ length: weeksInYear }).map((_, weekIndex) => (
-        <View key={weekIndex} className="mr-1 flex-col">
-          {Array.from({ length: daysInWeek }).map((_, dayIndex) => {
-            const dataIndex = weekIndex * daysInWeek + dayIndex;
-            const value = data[dataIndex] ?? 0;
-            return (
-              <View
-                key={dayIndex}
-                style={[styles.cell, { backgroundColor: getColor(value) }]}
-              />
-            );
-          })}
-        </View>
-      ))}
-    </ScrollView>
+    <View>
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        showsHorizontalScrollIndicator={false}
+      >
+        {Array.from({ length: weeksInYear }).map((_, weekIndex) => (
+          <View key={weekIndex} className="mr-1 flex-col">
+            {Array.from({ length: daysInWeek }).map((_, dayIndex) => {
+              const dataIndex = weekIndex * daysInWeek + dayIndex;
+              const value = memoizedData[dataIndex] ?? 0;
+              return (
+                <View
+                  key={dayIndex}
+                  style={[styles.cell, { backgroundColor: getColor(value) }]}
+                />
+              );
+            })}
+          </View>
+        ))}
+      </ScrollView>
+      <Animated.View
+        style={[styles.gradient, styles.leftGradient, leftGradientStyle]}
+      >
+        <LinearGradient
+          colors={[gradientColor, "transparent"]}
+          style={styles.gradientInner}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        />
+      </Animated.View>
+      <Animated.View
+        style={[styles.gradient, styles.rightGradient, rightGradientStyle]}
+      >
+        <LinearGradient
+          colors={["transparent", gradientColor]}
+          style={styles.gradientInner}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        />
+      </Animated.View>
+    </View>
   );
 };
 
@@ -74,4 +130,22 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     borderRadius: 2,
   },
+  gradient: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: 40,
+    pointerEvents: "none",
+  },
+  leftGradient: {
+    left: 0,
+  },
+  rightGradient: {
+    right: 0,
+  },
+  gradientInner: {
+    flex: 1,
+  },
 });
+
+export default React.memo(ContributionMatrix);

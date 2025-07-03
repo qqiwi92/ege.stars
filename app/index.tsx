@@ -7,7 +7,7 @@ import { ArrowRight } from "@/lib/icons/arrow-right";
 import { CircleQuestionMark } from "@/lib/icons/question-circle";
 import { Clock1 } from "@/lib/icons/clock";
 import { Button } from "@/components/ui/button";
-import { Href, useRouter } from "expo-router";
+import { Href, Redirect, useRouter } from "expo-router";
 
 const subjectData = [
   {
@@ -30,6 +30,8 @@ export default function Index() {
   const { data, error } = useUser();
   const { colors } = useTheme();
   const router = useRouter();
+    return Redirect({href: '/courses/2'})
+  
   return (
     <SafeAreaView className="flex h-full flex-1 items-center justify-start gap-5  px-6 pt-10">
       <H2 className=" border-b border-border">С возвращением, {data?.name}!</H2>

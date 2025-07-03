@@ -82,7 +82,7 @@ function SwitchNative({
       >
         <Animated.View style={animatedThumbStyle}>
           <SwitchPrimitives.Thumb
-            className={'h-7 w-7 rounded-full bg-background shadow-md shadow-foreground/25 ring-0'}
+            className={'h-7 w-7 rounded-xl bg-background shadow-md shadow-foreground/25 ring-0'}
           />
         </Animated.View>
       </SwitchPrimitives.Root>

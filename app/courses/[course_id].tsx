@@ -1,23 +1,40 @@
-import { H1, P } from "@/components/ui/typography";
-import { View } from "react-native";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import useCourse from "@/lib/fetching/useCourse";
+import NumberTab from "@/components/pages/courses/NumberTab";
 import { Button } from "@/components/ui/button";
+import { H2, P } from "@/components/ui/typography";
+import useCourse from "@/lib/fetching/useCourse";
 import { ArrowRight } from "@/lib/icons/arrow-right";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import { useState } from "react";
+import { useTabBarStore } from "@/lib/stores/tabBarStore";
+import {
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
+import React, { useState } from "react";
+import { View } from "react-native";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function Course() {
   const { course_id } = useLocalSearchParams();
   const router = useRouter();
-  const [currentTab, setCurrentTab] = useState('numbers')
-    const course = useCourse({
+  const [currentTab, setCurrentTab] = useState("numbers");
+  const course = useCourse({
     course_id: typeof course_id === "string" ? course_id : "",
   });
+  const { setIsVisible } = useTabBarStore();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsVisible(false);
+      return () => {
+        setIsVisible(true);
+      };
+    }, []),
+  );
   if (typeof course_id !== "string" || !course_id) return null;
+
   return (
-    <View className="h-full w-full flex-1 pt-10 px-3">
-     
+    <View className="h-full w-full flex-1 px-3 pt-10">
       <Stack.Screen
         name="Course"
         options={{
@@ -34,27 +51,26 @@ export default function Course() {
           ),
         }}
       />
-        <Tabs
+      <Tabs
         value={currentTab}
         onValueChange={setCurrentTab}
-        className='mx-auto flex-col gap-1.5'
+        className="mx-auto mb-10 flex-col gap-1.5  h-full"
       >
-        <TabsList className='flex-row w-full'>
-          <TabsTrigger value='account' className='flex-1'>
-            <P>номера</P>
+        <TabsList className="w-full flex-row mb-5">
+          <TabsTrigger value="numbers" className="flex-1">
+            <P>задания</P>
           </TabsTrigger>
-          <TabsTrigger value='password' className='flex-1'>
+          <TabsTrigger value="sets" className="flex-1">
             <P>варианты</P>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value='account'>
-         
+        <TabsContent value="numbers" className="h-[80%]">
+          <NumberTab course={course} />
         </TabsContent>
-        <TabsContent value='password'>WF
-         <P>Two</P>
+        <TabsContent value="sets">
+          <P>sets</P>
         </TabsContent>
       </Tabs>
     </View>
   );
 }
-

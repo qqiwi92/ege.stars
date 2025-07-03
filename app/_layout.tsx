@@ -1,13 +1,15 @@
 import { QueryProvider } from "@/components/queryProvider";
 import { BookOpen } from "@/lib/icons/bookOpen";
 import { User } from "@/lib/icons/user";
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 import {
   DarkTheme,
   DefaultTheme,
   Theme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { Tabs } from "expo-router";
+import {  Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
@@ -15,7 +17,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "~/global.css";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { useTabBarStore } from "@/lib/stores/tabBarStore";
 
 const LIGHT_THEME: Theme = {
@@ -64,6 +65,7 @@ export default function RootLayout() {
               tabBarStyle: {
                 paddingTop: 5,
                 paddingBottom: 10,
+                display: isVisible ? "flex" : "none",
               },
             }}
           >

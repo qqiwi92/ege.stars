@@ -10,7 +10,7 @@ import { Share } from "@/lib/icons/share";
 import { Settings } from "@/lib/icons/settings";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { ContributionMatrix } from "@/components/contributionMatrix";
+import ContributionMatrix from "@/components/contributionMatrix";
 export default function Profile() {
   const { data, error } = useUser();
   const [sendNotifications, setSendNotifications] = useState(false);
