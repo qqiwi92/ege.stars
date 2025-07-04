@@ -13,5 +13,9 @@ export default function CourseLayout() {
       };
     }, []),
   );
-  return <Stack />;
+  return (
+    <Stack>
+      <Stack.Screen name="[course_id]" options={{ headerShown: false }} />
+    </Stack>
+  );
 }

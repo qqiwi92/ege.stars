@@ -17,21 +17,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 export default function Course() {
   const { course_id } = useLocalSearchParams();
   const router = useRouter();
-  const [currentTab, setCurrentTab] = useState("numbers");
+  const [currentTab, setCurrentTab] = useState("sets");
   const course = useCourse({
     course_id: typeof course_id === "string" ? course_id : "",
   });
 
- 
   if (typeof course_id !== "string" || !course_id) return null;
 
   return (
     <View className="h-full w-full flex-1 px-3 pt-10">
       <Stack.Screen
-        name="Course"
         options={{
           title: course.name,
-          //   headerTitleAlign: "center",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <Button
               variant="ghost"
@@ -46,21 +44,29 @@ export default function Course() {
       <Tabs
         value={currentTab}
         onValueChange={setCurrentTab}
-        className="mx-auto mb-10 flex-col gap-1.5  h-full "
+        className="mx-auto mb-10 h-full flex-col  gap-1.5 "
       >
-        <TabsList className="w-full min-h-10 flex-row mb-5 bg-primary">
+        <TabsList className="mb-5 min-h-10 w-full flex-row bg-primary">
           <TabsTrigger value="numbers" className="flex-1">
-            <P className={`${currentTab === 'numbers' ? 'text-foreground': 'text-primary-foreground'}`}>задания</P>
+            <P
+              className={`${currentTab === "numbers" ? "text-foreground" : "text-primary-foreground"}`}
+            >
+              задания
+            </P>
           </TabsTrigger>
           <TabsTrigger value="sets" className="flex-1">
-            <P className={`${currentTab === 'sets' ? 'text-foreground': 'text-primary-foreground'}`}>варианты</P>
+            <P
+              className={`${currentTab === "sets" ? "text-foreground" : "text-primary-foreground"}`}
+            >
+              варианты
+            </P>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="numbers" className="min-h-[80%] flex-1 pb-10">
+        <TabsContent value="numbers" className="min-h-[80%] flex-1 pb-5">
           <NumberTab course={course} />
         </TabsContent>
         <TabsContent value="sets">
-          <SetsTab/>
+          <SetsTab />
         </TabsContent>
       </Tabs>
     </View>

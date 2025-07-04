@@ -68,7 +68,7 @@ export default function NumberTab({ course }: { course: Course }) {
     }
   }, [selectedSet, course.excercises, course.sets]);
   return (
-    <View className="flex h-full flex-1 rounded-xl bg-card/25">
+    <View className="flex h-full flex-1">
       <View className="items-between flex  justify-start px-2">
         <View className="flex flex-row items-center justify-between pb-3">
           <H2 className="w-fit">Набор </H2>
@@ -189,7 +189,9 @@ export default function NumberTab({ course }: { course: Course }) {
           data={filteredExcercises}
           keyExtractor={(item) => item.id + item.title}
           numColumns={3}
-          renderItem={({ item }) => <MasonryItem course={course} excercise={item as Excercise} />}
+          renderItem={({ item }) => (
+            <MasonryItem course={course} excercise={item as Excercise} />
+          )}
           onScroll={(e) => {
             const { layoutMeasurement, contentOffset, contentSize } =
               e.nativeEvent;
@@ -219,7 +221,7 @@ export default function NumberTab({ course }: { course: Course }) {
           />
         </Animated.View>
       </View>
-      <View className="flex border-collapse  gap-3 rounded-xl border-foreground/50 bg-card p-3 pt-5">
+      <View className="mt-3 flex border-collapse  gap-3 rounded-xl border-foreground/50 bg-card p-3 pt-5">
         <Button variant={"secondary"} className="max-w-fit">
           <P className="font-semibold text-secondary-foreground">
             составить вариант

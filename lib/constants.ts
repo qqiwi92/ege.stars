@@ -3,8 +3,8 @@ export const NAV_THEME = {
     background: 'hsl(327 57% 98%)', // background
     border: 'hsl(327 0% 93.08%)', // border
     card: 'hsl(327 0% 93.08%)', // card
-    notification: 'hsl(0 89% 28%)', // destructive
-    primary: 'hsl(117.74 100% 19.23%)', // primary
+    notification: 'hsl(0 94% 65%)', // destructive
+    primary: 'hsl(117.74 41.17% 55.55%)', // primary
     text: 'hsl(327 63% 5%)', // foreground
   },
   dark: {

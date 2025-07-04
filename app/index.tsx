@@ -30,10 +30,12 @@ export default function Index() {
   const { data, error } = useUser();
   const { colors } = useTheme();
   const router = useRouter();
-  // return Redirect({href:'/courses/3/3'})
+  // return Redirect({href:'/courses/3'})
   return (
     <SafeAreaView className="flex h-full flex-1 items-center justify-start gap-5  px-6 pt-10">
-      <H2 className=" border-b border-border">С возвращением, {data?.name ? data?.name : 'Неизвестный'}!</H2>
+      <H2 className=" border-b border-border">
+        С возвращением, {data?.name ? data?.name : "Неизвестный"}!
+      </H2>
       <View
         onTouchEndCapture={() => console.log("hey")}
         className="flex flex-row justify-between"

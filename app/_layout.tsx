@@ -91,16 +91,12 @@ export default function RootLayout() {
                   ),
                 }}
               />
+
               <Tabs.Screen
-                name="courses/[course_id]/index"
+                name="courses"
                 options={{
                   href: null,
-                }}
-              />
-              <Tabs.Screen
-                name="courses/[course_id]/cheat/[lesson_id]"
-                options={{
-                  href: null,
+                  headerShown: false,
                 }}
               />
             </Tabs>
