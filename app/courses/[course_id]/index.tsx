@@ -1,9 +1,9 @@
 import NumberTab from "@/components/pages/courses/NumberTab";
+import SetsTab from "@/components/pages/sets/SetsTab";
 import { Button } from "@/components/ui/button";
 import { H2, P } from "@/components/ui/typography";
 import useCourse from "@/lib/fetching/useCourse";
 import { ArrowRight } from "@/lib/icons/arrow-right";
-import { useTabBarStore } from "@/lib/stores/tabBarStore";
 import {
   Stack,
   useFocusEffect,
@@ -21,16 +21,8 @@ export default function Course() {
   const course = useCourse({
     course_id: typeof course_id === "string" ? course_id : "",
   });
-  const { setIsVisible } = useTabBarStore();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsVisible(false);
-      return () => {
-        setIsVisible(true);
-      };
-    }, []),
-  );
+ 
   if (typeof course_id !== "string" || !course_id) return null;
 
   return (
@@ -54,21 +46,21 @@ export default function Course() {
       <Tabs
         value={currentTab}
         onValueChange={setCurrentTab}
-        className="mx-auto mb-10 flex-col gap-1.5  h-full"
+        className="mx-auto mb-10 flex-col gap-1.5  h-full "
       >
-        <TabsList className="w-full flex-row mb-5">
+        <TabsList className="w-full min-h-10 flex-row mb-5 bg-primary">
           <TabsTrigger value="numbers" className="flex-1">
-            <P>задания</P>
+            <P className={`${currentTab === 'numbers' ? 'text-foreground': 'text-primary-foreground'}`}>задания</P>
           </TabsTrigger>
           <TabsTrigger value="sets" className="flex-1">
-            <P>варианты</P>
+            <P className={`${currentTab === 'sets' ? 'text-foreground': 'text-primary-foreground'}`}>варианты</P>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="numbers" className="h-[80%]">
+        <TabsContent value="numbers" className="min-h-[80%] flex-1 pb-10">
           <NumberTab course={course} />
         </TabsContent>
         <TabsContent value="sets">
-          <P>sets</P>
+          <SetsTab/>
         </TabsContent>
       </Tabs>
     </View>

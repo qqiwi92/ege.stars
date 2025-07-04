@@ -7,3 +7,4 @@ export type Course = {
   first_part: number[];
   sets: NumberSet[];
 };
+

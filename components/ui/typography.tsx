@@ -144,5 +144,10 @@ function Muted({ className, asChild = false, ...props }: TypographyProps) {
     />
   );
 }
-
-export { BlockQuote, Code, H1, H2, H3, H4, Large, Lead, Muted, P, Small };
+function Bold({ className, asChild = false, ...props }: TypographyProps) {
+  const Component = asChild ? Slot.Text : RNText;
+  return (
+    <Component className={cn('font-bold text-foreground web:select-text', className)} {...props} />
+  );
+}
+export { BlockQuote, Code, H1, H2, H3, H4, Large, Lead, Muted, P, Small, Bold };

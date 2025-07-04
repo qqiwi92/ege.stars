@@ -1,26 +1,26 @@
-import { Input } from "@/components/ui/input";
-import { H2, P } from "@/components/ui/typography";
-import { ChevronsUpDown } from "@/lib/icons/up-down";
+import { Button } from "@/components/ui/button";
+import { Bold, H2, P } from "@/components/ui/typography";
+import What from "@/components/What";
+import toHsla from "@/lib/toHsla";
 import { Course } from "@/lib/types/Course";
 import { Excercise } from "@/lib/types/Excercise";
 import { NumberSet } from "@/lib/types/NumberSet";
+import { cn } from "@/lib/utils";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useTheme } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
-import { TextInput, View, Keyboard } from "react-native";
+import { TextInput, View } from "react-native";
 import { Dropdown, IDropdownRef } from "react-native-element-dropdown";
-import MasonryItem from "./MansoryItem";
-import { cn } from "@/lib/utils";
 import Animated, {
   FadeIn,
   FadeOut,
-  Layout,
   LinearTransition,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
+import MasonryItem from "./MansoryItem";
 
 export default function NumberTab({ course }: { course: Course }) {
   const [filteredExcercises, setFilteredExcercises] = useState(
@@ -68,25 +68,42 @@ export default function NumberTab({ course }: { course: Course }) {
     }
   }, [selectedSet, course.excercises, course.sets]);
   return (
-    <View className="flex-1 flex bg-card/25 rounded-xl h-full">
+    <View className="flex h-full flex-1 rounded-xl bg-card/25">
       <View className="items-between flex  justify-start px-2">
-        <H2 className="w-fit">Набор </H2>
+        <View className="flex flex-row items-center justify-between pb-3">
+          <H2 className="w-fit">Набор </H2>
+          <What>
+            <View className="flex flex-col gap-2">
+              <P className="">
+                На этой странице вы можете сами составить себе вариант из{" "}
+                <Bold>открытого</Bold> банка заданий.{" "}
+                <P className="text-foreground/80">
+                  {" "}
+                  Данный вариант не будет проверяться учителем
+                </P>
+              </P>
+              <P className="">
+                Вы также можете нажать на нужный номер и получить шпаргалку по
+                нему
+              </P>
+            </View>
+          </What>
+        </View>
         <View className="relative mb-5 min-h-10 w-full ">
           <Dropdown
             ref={dropdownRef}
             style={{
               backgroundColor: colors.card,
-              borderColor: colors.text,
+              borderColor: toHsla(colors.text, 0.5),
               borderWidth: 1,
               borderRadius: 10,
               paddingHorizontal: 16,
-              paddingVertical: 6,
+              paddingVertical: 10,
             }}
             selectedTextStyle={{
               fontWeight: "500",
               textAlign: "center",
               color: colors.text,
-              
             }}
             containerStyle={{
               backgroundColor: colors.card,
@@ -111,7 +128,7 @@ export default function NumberTab({ course }: { course: Course }) {
                 <TextInput
                   ref={inputRef as any}
                   onChangeText={onSearch}
-                  className="mb-3 border-2 border-primary rounded-xl px-3 py-1 h-12"
+                  className="mb-3 h-12 rounded-xl border-2 border-primary px-3 py-1"
                   placeholder="Поиск..."
                 />
               );
@@ -130,7 +147,7 @@ export default function NumberTab({ course }: { course: Course }) {
                       dropdownRef.current?.close();
                     }}
                     className={cn(
-                      "p-2 rounded-md",
+                      "rounded-md p-2",
                       selected && "text-primary-foreground",
                     )}
                   >
@@ -161,17 +178,18 @@ export default function NumberTab({ course }: { course: Course }) {
           ]}
         >
           <LinearGradient
-            colors={["rgba(0,0,0,0.8)", "transparent"]}
-            style={{ flex: 1 }}
+            colors={[colors.background, "transparent"]}
+            style={{ flex: 1, height: 30 }}
           />
         </Animated.View>
         <MasonryList
+          refreshing={false}
+          refreshControl={false}
           className="flex-1"
           data={filteredExcercises}
           keyExtractor={(item) => item.id + item.title}
           numColumns={3}
-          onEndReached={() => {}}
-          renderItem={({ item }) => <MasonryItem data={item as Excercise} />}
+          renderItem={({ item }) => <MasonryItem course={course} excercise={item as Excercise} />}
           onScroll={(e) => {
             const { layoutMeasurement, contentOffset, contentSize } =
               e.nativeEvent;
@@ -196,12 +214,22 @@ export default function NumberTab({ course }: { course: Course }) {
           ]}
         >
           <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.8)"]}
-            style={{ flex: 1 }}
+            colors={["transparent", colors.background]}
+            style={{ flex: 1, height: 30 }}
           />
         </Animated.View>
+      </View>
+      <View className="flex border-collapse  gap-3 rounded-xl border-foreground/50 bg-card p-3 pt-5">
+        <Button variant={"secondary"} className="max-w-fit">
+          <P className="font-semibold text-secondary-foreground">
+            составить вариант
+          </P>
+        </Button>
+        <P className="text-foreground/80">
+          Этот вариант будет состоять из заданий нашего открытого банка OpenStar
+          и не будет проверен вашим ментором
+        </P>
       </View>
     </View>
   );
 }
-

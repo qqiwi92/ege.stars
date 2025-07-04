@@ -1,18 +1,19 @@
-import { H1, H2, H3, P } from "@/components/ui/typography";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Text } from "@/components/ui/text";
-import useUser from "@/lib/fetching/useUser";
-import { View } from "react-native";
-import { Star } from "@/lib/icons/star";
-import { ScrollView } from "react-native";
-import { Button } from "@/components/ui/button";
-import { Share } from "@/lib/icons/share";
-import { Settings } from "@/lib/icons/settings";
-import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
 import ContributionMatrix from "@/components/contributionMatrix";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Text } from "@/components/ui/text";
+import { H1, H2, H3, P } from "@/components/ui/typography";
+import useUser from "@/lib/fetching/useUser";
+import { Settings } from "@/lib/icons/settings";
+import { Share } from "@/lib/icons/share";
+import { Star } from "@/lib/icons/star";
+import { useTheme } from "@react-navigation/native";
+import { useState } from "react";
+import { ScrollView, View } from "react-native";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 export default function Profile() {
   const { data, error } = useUser();
+  const { colors } = useTheme();
   const [sendNotifications, setSendNotifications] = useState(false);
   const achievements = [
     {
@@ -37,7 +38,12 @@ export default function Profile() {
         <View className="relative mb-3 flex w-full flex-row items-end justify-start gap-5 bg-card px-3 pb-2 pt-10">
           <Avatar
             alt="hey"
-            style={{ width: 100, height: 100 }}
+            style={{
+              width: 100,
+              height: 100,
+              borderWidth: 2,
+              borderColor: colors.text,
+            }}
             className="translate-y-5"
           >
             <AvatarImage

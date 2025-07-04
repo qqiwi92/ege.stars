@@ -30,11 +30,10 @@ export default function Index() {
   const { data, error } = useUser();
   const { colors } = useTheme();
   const router = useRouter();
-    return Redirect({href: '/courses/2'})
-  
+  // return Redirect({href:'/courses/3/3'})
   return (
     <SafeAreaView className="flex h-full flex-1 items-center justify-start gap-5  px-6 pt-10">
-      <H2 className=" border-b border-border">С возвращением, {data?.name}!</H2>
+      <H2 className=" border-b border-border">С возвращением, {data?.name ? data?.name : 'Неизвестный'}!</H2>
       <View
         onTouchEndCapture={() => console.log("hey")}
         className="flex flex-row justify-between"
@@ -81,7 +80,7 @@ export default function Index() {
                   </P>
 
                   <P>{subject.name}</P>
-                  <View className="relative flex w-[100px] items-center justify-center overflow-hidden rounded-xl border border-foreground">
+                  <View className="relative flex w-[100px] items-center justify-center overflow-hidden rounded-xl border border-primary">
                     <P className="absolute left-3 top-1/2 z-10 -translate-y-1/2 font-semibold text-primary-foreground">
                       {subject.progress}%
                     </P>

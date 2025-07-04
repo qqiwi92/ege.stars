@@ -1,15 +1,17 @@
 import { QueryProvider } from "@/components/queryProvider";
 import { BookOpen } from "@/lib/icons/bookOpen";
 import { User } from "@/lib/icons/user";
-import 'react-native-reanimated'
-import 'react-native-gesture-handler'
+import "react-native-reanimated";
+import "react-native-gesture-handler";
+import { PortalHost } from "@rn-primitives/portal";
+
 import {
   DarkTheme,
   DefaultTheme,
   Theme,
   ThemeProvider,
 } from "@react-navigation/native";
-import {  Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
@@ -18,6 +20,7 @@ import "~/global.css";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { useTabBarStore } from "@/lib/stores/tabBarStore";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -55,48 +58,57 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <SafeAreaProvider>
-      <QueryProvider>
-        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-          <Tabs
-            screenOptions={{
-              animation: "shift",
-              tabBarStyle: {
-                paddingTop: 5,
-                paddingBottom: 10,
-                display: isVisible ? "flex" : "none",
-              },
-            }}
-          >
-            <Tabs.Screen
-              name="index"
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ color, focused, size }) => (
-                  <BookOpen size={size} color={color} />
-                ),
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <QueryProvider>
+          <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+            <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+            <Tabs
+              screenOptions={{
+                animation: "shift",
+                tabBarStyle: {
+                  paddingTop: 5,
+                  paddingBottom: 10,
+                  display: isVisible ? "flex" : "none",
+                },
               }}
-            />
-            <Tabs.Screen
-              name="profile"
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ color, focused, size }) => (
-                  <User size={size} color={color} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="courses/[course_id]"
-              options={{
-                href: null,
-              }}
-            />
-          </Tabs>
-        </ThemeProvider>
-      </QueryProvider>
-    </SafeAreaProvider>
+            >
+              <Tabs.Screen
+                name="index"
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, focused, size }) => (
+                    <BookOpen size={size} color={color} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="profile"
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, focused, size }) => (
+                    <User size={size} color={color} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="courses/[course_id]/index"
+                options={{
+                  href: null,
+                }}
+              />
+              <Tabs.Screen
+                name="courses/[course_id]/cheat/[lesson_id]"
+                options={{
+                  href: null,
+                }}
+              />
+            </Tabs>
+            <PortalHost />
+          </ThemeProvider>
+        </QueryProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
