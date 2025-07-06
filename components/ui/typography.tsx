@@ -15,7 +15,7 @@ function H1({ className, asChild = false, ...props }: TypographyProps) {
       role='heading'
       aria-level='1'
       className={cn(
-        'web:scroll-m-20 text-4xl text-foreground font-extrabold tracking-tight lg:text-5xl web:select-text',
+        'web:scroll-m-20 scale-y-90 text-4xl text-foreground font-extrabold tracking-tight lg:text-5xl web:select-text',
         className
       )}
       {...props}
@@ -30,7 +30,7 @@ function H2({ className, asChild = false, ...props }: TypographyProps) {
       role='heading'
       aria-level='2'
       className={cn(
-        'web:scroll-m-20 pb-2 text-3xl text-foreground font-semibold tracking-tight first:mt-0 web:select-text',
+        'web:scroll-m-20 pb-2 scale-y-90 text-3xl text-foreground font-semibold tracking-tight first:mt-0 web:select-text',
         className
       )}
       {...props}

@@ -7,27 +7,32 @@ const useCheatSheet = ({
   excersiceID: string;
   courseName: string;
 }) => {
-  const { data, error, isLoading } = useQuery({
+  return useQuery({
     queryKey: ["cheatSheet", excersiceID, courseName],
-    queryFn: () => {
+    queryFn: async () => {
       // immitate for now
+      await new Promise((resolve) => setTimeout(resolve, 100)) 
       return [
         {
+          id: "1",
           title: "Теория по стериометрии",
           estTimeInMin: 3,
           haveNotSeen: false,
         },
         {
+          id: "2",
           title: "Практика",
           estTimeInMin: 6,
           haveNotSeen: true,
         },
         {
+          id: "3",
           title: "ДЗ",
           estTimeInMin: 30,
           haveNotSeen: true,
         },
         {
+          id: "4",
           title: "Повторение",
           estTimeInMin: 5,
           haveNotSeen: false,
@@ -36,8 +41,6 @@ const useCheatSheet = ({
     },
   });
 
-  return { data, error, isLoading };
 };
 
 export default useCheatSheet;
-

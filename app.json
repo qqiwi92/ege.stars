@@ -45,7 +45,14 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsPictureInPicture": true
+        }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true

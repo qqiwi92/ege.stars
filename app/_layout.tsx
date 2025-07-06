@@ -77,6 +77,7 @@ export default function RootLayout() {
                 name="index"
                 options={{
                   headerShown: false,
+                  title: "Главная",
                   tabBarIcon: ({ color, focused, size }) => (
                     <BookOpen size={size} color={color} />
                   ),
@@ -85,6 +86,7 @@ export default function RootLayout() {
               <Tabs.Screen
                 name="profile"
                 options={{
+                  title: "Профиль",
                   headerShown: false,
                   tabBarIcon: ({ color, focused, size }) => (
                     <User size={size} color={color} />

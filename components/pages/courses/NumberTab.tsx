@@ -8,7 +8,6 @@ import { NumberSet } from "@/lib/types/NumberSet";
 import { cn } from "@/lib/utils";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useTheme } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import { TextInput, View } from "react-native";
 import { Dropdown, IDropdownRef } from "react-native-element-dropdown";
@@ -16,11 +15,11 @@ import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 import MasonryItem from "./MansoryItem";
+import GradientScrollViewWrapper from "@/components/ui/GradientScrollViewWrapper";
+import { CirclePlus } from "@/lib/icons/circle-plus";
+import { MotiView } from "moti";
 
 export default function NumberTab({ course }: { course: Course }) {
   const [filteredExcercises, setFilteredExcercises] = useState(
@@ -31,17 +30,6 @@ export default function NumberTab({ course }: { course: Course }) {
   const inputRef = useRef<TextInput | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const { colors } = useTheme();
-
-  const isAtTop = useSharedValue(true);
-  const isAtBottom = useSharedValue(false);
-
-  const topGradientStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isAtTop.value ? 0 : 1, { duration: 300 }),
-  }));
-
-  const bottomGradientStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isAtBottom.value ? 0 : 1, { duration: 300 }),
-  }));
 
   useEffect(() => {
     if (isFocused) {
@@ -68,7 +56,7 @@ export default function NumberTab({ course }: { course: Course }) {
     }
   }, [selectedSet, course.excercises, course.sets]);
   return (
-    <View className="flex h-full flex-1">
+    <MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex  h-full flex-1">
       <View className="items-between flex  justify-start px-2">
         <View className="flex flex-row items-center justify-between pb-3">
           <H2 className="w-fit">Набор </H2>
@@ -123,6 +111,7 @@ export default function NumberTab({ course }: { course: Course }) {
             search
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            showsVerticalScrollIndicator={false}
             renderInputSearch={(onSearch) => {
               return (
                 <TextInput
@@ -136,8 +125,7 @@ export default function NumberTab({ course }: { course: Course }) {
             renderItem={(item: NumberSet, selected) => {
               return (
                 <Animated.View
-                  entering={FadeIn.delay(100).duration(200)}
-                  exiting={FadeOut.duration(100)}
+                  entering={FadeIn.duration(200)}
                   layout={LinearTransition.duration(200)}
                 >
                   <P
@@ -162,67 +150,28 @@ export default function NumberTab({ course }: { course: Course }) {
           />
         </View>
       </View>
-      <View className="flex-1">
-        <Animated.View
-          style={[
-            {
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 40,
-              zIndex: 10,
-              pointerEvents: "none",
-            },
-            topGradientStyle,
-          ]}
-        >
-          <LinearGradient
-            colors={[colors.background, "transparent"]}
-            style={{ flex: 1, height: 30 }}
+      <GradientScrollViewWrapper>
+        {(onScroll) => (
+          <MasonryList
+            onScroll={onScroll}
+            refreshing={false}
+            refreshControl={false}
+            className="flex-1"
+            data={filteredExcercises}
+            keyExtractor={(item) => item.id + item.title}
+            numColumns={3}
+            renderItem={({ item }) => (
+              <MasonryItem course={course} excercise={item as Excercise} />
+            )}
           />
-        </Animated.View>
-        <MasonryList
-          refreshing={false}
-          refreshControl={false}
-          className="flex-1"
-          data={filteredExcercises}
-          keyExtractor={(item) => item.id + item.title}
-          numColumns={3}
-          renderItem={({ item }) => (
-            <MasonryItem course={course} excercise={item as Excercise} />
-          )}
-          onScroll={(e) => {
-            const { layoutMeasurement, contentOffset, contentSize } =
-              e.nativeEvent;
-            isAtTop.value = contentOffset.y <= 0;
-            isAtBottom.value =
-              layoutMeasurement.height + contentOffset.y >=
-              contentSize.height - 1;
-          }}
-        />
-        <Animated.View
-          style={[
-            {
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 40,
-              zIndex: 10,
-              pointerEvents: "none",
-            },
-            bottomGradientStyle,
-          ]}
-        >
-          <LinearGradient
-            colors={["transparent", colors.background]}
-            style={{ flex: 1, height: 30 }}
-          />
-        </Animated.View>
-      </View>
+        )}
+      </GradientScrollViewWrapper>
       <View className="mt-3 flex border-collapse  gap-3 rounded-xl border-foreground/50 bg-card p-3 pt-5">
-        <Button variant={"secondary"} className="max-w-fit">
+        <Button
+          variant={"secondary"}
+          className="flex max-w-fit flex-row items-center justify-center gap-3"
+        >
+          <CirclePlus className="size-5 stroke-secondary-foreground" />
           <P className="font-semibold text-secondary-foreground">
             составить вариант
           </P>
@@ -232,6 +181,6 @@ export default function NumberTab({ course }: { course: Course }) {
           и не будет проверен вашим ментором
         </P>
       </View>
-    </View>
+    </MotiView>
   );
 }

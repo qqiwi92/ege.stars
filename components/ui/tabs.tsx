@@ -56,13 +56,14 @@ function TabsContent({
   ref?: React.RefObject<TabsPrimitive.ContentRef>;
 }) {
   return (
+
     <TabsPrimitive.Content
       className={cn(
         'web:ring-offset-background web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
         className
       )}
       {...props}
-    />
+      />
   );
 }
 

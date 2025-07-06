@@ -11,6 +11,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@dev-plugins/react-query": "^0.3.1",
     "@expo/vector-icons": "^14.1.0",
     "@react-native-seoul/masonry-list": "^1.4.2",
     "@react-navigation/bottom-tabs": "^7.3.10",
@@ -55,8 +56,10 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
+    "rn-mdx": "^0.0.7",
     "tailwind-merge": "^3.3.1",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.6",
+    "expo-video": "~2.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

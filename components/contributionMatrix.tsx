@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useCallback } from "react";
+import React, { useMemo, useRef, useCallback, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -31,7 +31,7 @@ const getColor = (value: number) => {
 
 const generateRandomData = (): number[] =>
   Array.from({ length: daysInWeek * weeksInYear }, () =>
-    Math.floor(Math.random() * 10)
+    Math.floor(Math.random() * 10),
   );
 
 const ContributionMatrix: React.FC<ContributionMatrixProps> = ({ data }) => {
@@ -71,13 +71,19 @@ const ContributionMatrix: React.FC<ContributionMatrixProps> = ({ data }) => {
         })}
       </View>
     ),
-    [memoizedData]
+    [memoizedData],
   );
 
   const gradientColor = isDarkColorScheme ? "#18181b" : "#FFFFFF";
+  useEffect(()=>{
+    const tId = setTimeout(()=> {
+      scrollRef.current?.scrollToEnd({animated:true})
+    }, 200)
+    return clearTimeout(tId)
+  },[])
 
   return (
-    <View>
+    <View className="">
       <FlatList
         ref={scrollRef}
         horizontal
@@ -94,9 +100,6 @@ const ContributionMatrix: React.FC<ContributionMatrixProps> = ({ data }) => {
           index,
         })}
         removeClippedSubviews
-        windowSize={5}
-        maxToRenderPerBatch={8}
-        initialNumToRender={10}
       />
       <Animated.View
         style={[styles.gradient, styles.leftGradient, leftGradientStyle]}
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     marginBottom: 2,
-    borderRadius: 2,
+    borderRadius: 200,
   },
   gradient: {
     position: "absolute",
